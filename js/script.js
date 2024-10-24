@@ -19,7 +19,7 @@ numberArray.forEach((arrayItem) => {
     listNumbers.appendChild(newListItem)
 })
 
-confirmBtn.addEventListener('click', (event) => {
+confirmBtn.addEventListener('click', () => {
     const userInputArray = saveUserData()
     const correctNumbers = compareArrays(userInputArray, numberArray)
     const messageClassList = message.classList
