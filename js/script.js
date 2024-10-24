@@ -20,25 +20,46 @@ numberArray.forEach((arrayItem) => {
 })
 
 confirmBtn.addEventListener('click', (event) => {
-    event.preventDefault()
-
     const userInputArray = saveUserData()
     const correctNumbers = compareArrays(userInputArray, numberArray)
+    const messageClassList = message.classList
+    let messageUpdated = ''
 
-    if (correctNumbers.length === 0) {
-        message.innerText = 'Non hai indovinato nessun numero!'
-    } else if (correctNumbers.length === itemNumber) {
-        message.classList.add('text-success')
-        message.classList.remove('text-danger')
-        message.innerText = 'Hai indovinato tutti i numeri! Congratulazioni!'
+    if (userInputArray === 0) {
+        disableUserInput()
+        messageUpdated = 'Dati inseriti non validi!'
+        message.innerText = messageUpdated
+        confirmBtnToRefreshBtn()
     } else {
-        message.innerText = `Hai indovinato ${
-            correctNumbers.length
-        } numeri! (${correctNumbers.join(', ')})`
-    }
+        if (correctNumbers.length === 0) {
+            messageUpdated = 'Non hai indovinato nessun numero!'
+        } else if (correctNumbers.length === itemNumber) {
+            messageClassList.add('text-success')
+            messageClassList.remove('text-danger')
+            messageUpdated = 'Hai indovinato tutti i numeri! Congratulazioni!'
+        } else {
+            messageUpdated = `Hai indovinato ${
+                correctNumbers.length
+            } numeri! (${correctNumbers.join(', ')})`
+        }
 
-    disableUserInput()
+        message.innerText = messageUpdated
+
+        disableUserInput()
+        confirmBtnToRefreshBtn()
+    }
 })
+
+function confirmBtnToRefreshBtn() {
+    confirmBtn.innerText = 'Riprova'
+    const confirmBtnClassList = confirmBtn.classList
+    confirmBtnClassList.remove('btn-primary')
+    confirmBtnClassList.add('btn-warning')
+
+    confirmBtn.addEventListener('click', () => {
+        location.reload()
+    })
+}
 
 function disableUserInput() {
     const userInput = userDataGroup.children
@@ -62,7 +83,12 @@ function saveUserData() {
     const outputArray = []
     const userInput = userDataGroup.children
     for (let i = 0; i < userInput.length; i++) {
-        outputArray.push(parseInt(userInput[i].value))
+        const userInputInt = parseInt(userInput[i].value)
+        if (userInputInt >= 0 && userInputInt <= 50) {
+            outputArray.push(userInputInt)
+        } else {
+            return 0
+        }
     }
 
     return outputArray
