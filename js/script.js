@@ -19,7 +19,11 @@ numberArray.forEach((arrayItem) => {
     listNumbers.appendChild(newListItem)
 })
 
-confirmBtn.addEventListener('click', () => {
+playForm.addEventListener('submit', submitHandler)
+
+function submitHandler(event) {
+    event.preventDefault()
+
     const userInputArray = saveUserData()
     const correctNumbers = compareArrays(userInputArray, numberArray)
     const messageClassList = message.classList
@@ -46,17 +50,18 @@ confirmBtn.addEventListener('click', () => {
         message.innerText = messageUpdated
 
         disableUserInput()
+
         confirmBtnToRefreshBtn()
     }
-})
+}
 
 function confirmBtnToRefreshBtn() {
     confirmBtn.innerText = 'Riprova'
     const confirmBtnClassList = confirmBtn.classList
     confirmBtnClassList.remove('btn-primary')
     confirmBtnClassList.add('btn-warning')
-
-    confirmBtn.addEventListener('click', () => {
+    playForm.removeEventListener('submit', submitHandler)
+    playForm.addEventListener('submit', () => {
         location.reload()
     })
 }
