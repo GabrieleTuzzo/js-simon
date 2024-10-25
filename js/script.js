@@ -5,19 +5,19 @@ const instructionElement = document.getElementById('instructions')
 const userDataGroup = document.getElementById('input-group')
 const message = document.getElementById('message')
 const confirmBtn = document.querySelector('.btn')
+
+// Gameplay variables
 const countdownTimeSecond = 3
 const itemNumber = 5
+const min = 1
+const max = 50
 
-const numberArray = fillRandomNumberArray(itemNumber)
+const numberArray = fillRandomNumberArray(itemNumber, min, max)
 console.log(numberArray)
 
 const isCountdownOver = startCountdown(countdownTimeSecond, countdownElement)
 
-numberArray.forEach((arrayItem) => {
-    const newListItem = document.createElement('li')
-    newListItem.innerText = arrayItem
-    listNumbers.appendChild(newListItem)
-})
+showPlayNumbers()
 
 playForm.addEventListener('submit', submitHandler)
 
@@ -53,6 +53,16 @@ function submitHandler(event) {
 
         confirmBtnToRefreshBtn()
     }
+}
+
+function showPlayNumbers() {
+    const shadowElement = document.createDocumentFragment() // !important
+    numberArray.forEach((arrayItem) => {
+        const newListItem = document.createElement('li')
+        newListItem.innerText = arrayItem
+        shadowElement.appendChild(newListItem)
+    })
+    listNumbers.appendChild(shadowElement)
 }
 
 function confirmBtnToRefreshBtn() {
@@ -121,12 +131,18 @@ function startCountdown(seconds, targetElement) {
     }, 1000)
 }
 
-function fillRandomNumberArray(items) {
+function fillRandomNumberArray(arrayLength, min, max) {
     const fullArray = []
-    for (let i = 0; i < items; i++) {
-        const randomInt0to50 = Math.floor(Math.random() * 50)
-        fullArray.push(randomInt0to50)
+    while (fullArray.length < arrayLength) {
+        const randomInt = getRandomNumber(min, max)
+        if (!fullArray.includes(randomInt)) {
+            fullArray.push(randomInt)
+        }
     }
 
     return fullArray
+}
+
+function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
 }
