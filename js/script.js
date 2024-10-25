@@ -59,7 +59,7 @@ function confirmBtnToRefreshBtn() {
     confirmBtn.innerText = 'Riprova'
     const confirmBtnClassList = confirmBtn.classList
     confirmBtnClassList.remove('btn-primary')
-    confirmBtnClassList.add('btn-warning')
+    confirmBtnClassList.add('btn-danger')
     playForm.removeEventListener('submit', submitHandler)
     playForm.addEventListener('submit', () => {
         location.reload()
